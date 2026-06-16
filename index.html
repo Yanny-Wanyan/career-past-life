@@ -148,6 +148,15 @@
   .btn-outline{background:transparent!important;border:2px solid var(--gold);color:var(--gold-light)!important}
   .share-hint{text-align:center;color:var(--gold);font-size:11px;opacity:.5;margin-top:12px}
 
+  /* image overlay */
+  .img-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:200;flex-direction:column;align-items:center;justify-content:center;padding:20px}
+  .img-overlay.show{display:flex}
+  .img-overlay img{max-width:92%;max-height:70vh;border-radius:8px;box-shadow:0 4px 30px rgba(0,0,0,.5)}
+  .img-overlay .overlay-hint{color:var(--gold-light);font-size:14px;margin-top:16px;text-align:center;line-height:1.6}
+  .img-overlay .overlay-close{position:absolute;top:16px;right:20px;color:#fff;font-size:28px;cursor:pointer;opacity:.7;z-index:201}
+  .img-overlay .overlay-close:hover{opacity:1}
+  .img-overlay .overlay-save-btn{margin-top:14px;padding:10px 36px;border:1.5px solid var(--gold);border-radius:6px;background:linear-gradient(180deg,var(--red),#6B1D00);color:var(--gold-light);font-family:'Ma Shan Zheng',cursive;font-size:18px;letter-spacing:3px;cursor:pointer}
+
   @media(max-width:420px){
     .main-title{font-size:28px}.result-official{font-size:34px}.scroll-body{padding:36px 18px 28px}.quiz-card{padding:22px 16px}.result-card{padding:30px 16px 22px}
   }
@@ -232,8 +241,16 @@
       <button class="btn btn-outline" onclick="restart()">再测一次</button>
       <button class="btn" onclick="shareResult()">保存图片</button>
     </div>
-    <p class="share-hint">双击结果卡片也可以保存图片 ✨</p>
+    <p class="share-hint">点击按钮生成图片，手机端长按图片可保存到相册 ✨</p>
   </div>
+</div>
+
+<!-- Image Overlay -->
+<div class="img-overlay" id="imgOverlay" onclick="closeOverlay(event)">
+  <span class="overlay-close" onclick="closeOverlay()">&times;</span>
+  <img id="overlayImg" src="" alt="结果卡片">
+  <div class="overlay-hint" id="overlayHint"></div>
+  <button class="overlay-save-btn" id="overlaySaveBtn" onclick="downloadImage()">下载图片</button>
 </div>
 
 <!-- Roast Toast -->
@@ -725,6 +742,8 @@ function restart(){ document.getElementById('nameInput').value=''; showScreen('s
 
 function shareResult(){ saveCardAsImage(); }
 
+let currentImageDataUrl = '';
+
 function saveCardAsImage(){
   const card = document.getElementById('resultCard');
   html2canvas(card, {
@@ -733,13 +752,37 @@ function saveCardAsImage(){
     useCORS: true,
     logging: false
   }).then(canvas => {
-    const link = document.createElement('a');
-    link.download = '职场前世档案_' + userName + '.png';
-    link.href = canvas.toDataURL('image/png');
-    link.click();
+    currentImageDataUrl = canvas.toDataURL('image/png');
+    const overlay = document.getElementById('imgOverlay');
+    const img = document.getElementById('overlayImg');
+    const hint = document.getElementById('overlayHint');
+    const saveBtn = document.getElementById('overlaySaveBtn');
+    img.src = currentImageDataUrl;
+    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+    if(isMobile){
+      hint.textContent = '📱 长按上方图片即可保存到相册';
+      saveBtn.style.display = 'none';
+    } else {
+      hint.textContent = '💻 点击下方按钮下载图片';
+      saveBtn.style.display = 'block';
+    }
+    overlay.classList.add('show');
   }).catch(()=>{
-    alert('截图保存失败，请手动截屏 📸');
+    alert('图片生成失败，请手动截屏 📸');
   });
+}
+
+function downloadImage(){
+  if(!currentImageDataUrl) return;
+  const link = document.createElement('a');
+  link.download = '职场前世档案_' + userName + '.png';
+  link.href = currentImageDataUrl;
+  link.click();
+}
+
+function closeOverlay(e){
+  if(e && e.target.tagName === 'IMG') return;
+  document.getElementById('imgOverlay').classList.remove('show');
 }
 
 document.addEventListener('dblclick', function(e){
