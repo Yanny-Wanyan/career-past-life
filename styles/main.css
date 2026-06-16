@@ -47,7 +47,7 @@ body{
   overflow-x:hidden;
   font-size:.28rem;
 }
-.app{width:100%;max-width:7.5rem;min-height:100vh;position:relative;background:linear-gradient(180deg,var(--bg-mid),var(--bg-dark))}
+.app{width:100%;max-width:600px;min-height:100vh;position:relative;background:linear-gradient(180deg,var(--bg-mid),var(--bg-dark));margin:0 auto}
 
 /* === Screens === */
 .screen{display:none;flex-direction:column;align-items:center;min-height:100vh}
@@ -191,7 +191,7 @@ body{
 .img-overlay .overlay-close:hover{opacity:1}
 .img-overlay .overlay-save-btn{margin-top:.28rem;padding:.2rem .72rem;border:.03rem solid var(--gold);border-radius:.12rem;background:linear-gradient(180deg,var(--red),#6B1D00);color:var(--gold-light);font-family:'Ma Shan Zheng',cursive;font-size:.36rem;letter-spacing:.06rem;cursor:pointer}
 
-/* PC适配：限制最大宽度时恢复px */
+/* PC适配：封顶font-size，内容居中自然显示 */
 @media(min-width:750px){
-  html{font-size:100px}
+  html{font-size:80px}
 }
