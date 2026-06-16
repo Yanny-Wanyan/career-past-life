@@ -1,0 +1,197 @@
+/* 职场前世档案 — main.css */
+/* 字体：使用 unpkg 国内镜像引入 */
+@font-face {
+  font-family: 'Ma Shan Zheng';
+  font-style: normal;
+font-weight: 400;
+  font-display: swap;
+  src: url('https://registry.npmmirror.com/@fontsource/ma-shan-zheng/files/ma-shan-zheng-chinese-simplified-400-normal.woff2') format('woff2'),
+       url('https://unpkg.com/@fontsource/ma-shan-zheng/files/ma-shan-zheng-chinese-simplified-400-normal.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Noto Serif SC';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('https://registry.npmmirror.com/@fontsource/noto-serif-sc/files/noto-serif-sc-chinese-simplified-400-normal.woff2') format('woff2'),
+       url('https://unpkg.com/@fontsource/noto-serif-sc/files/noto-serif-sc-chinese-simplified-400-normal.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Noto Serif SC';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('https://registry.npmmirror.com/@fontsource/noto-serif-sc/files/noto-serif-sc-chinese-simplified-700-normal.woff2') format('woff2'),
+       url('https://unpkg.com/@fontsource/noto-serif-sc/files/noto-serif-sc-chinese-simplified-700-normal.woff2') format('woff2');
+}
+
+*{margin:0;padding:0;box-sizing:border-box}
+
+:root{
+  --red:#8B2500;--red-light:#B8432F;
+  --gold:#C5963A;--gold-light:#E8C97A;--gold-dim:rgba(197,150,58,0.15);
+  --paper:#F5E6C8;--paper-dark:#E8D5A8;--paper-light:#FDF5E6;
+  --ink:#2C1810;--ink-light:#5C3A28;--ink-dim:#8B7355;
+  --bg-dark:#1a0e08;--bg-mid:#2C1810;--bg-glow:#3a1f12;
+  --green:#5B7744;--green-light:#8BAA6E;
+}
+
+html{font-size:calc(100vw / 7.5)}
+
+body{
+  font-family:'Noto Serif SC',serif;
+  background:var(--bg-dark);
+  min-height:100vh;
+  display:flex;
+  justify-content:center;
+  overflow-x:hidden;
+  font-size:.28rem;
+}
+.app{width:100%;max-width:7.5rem;min-height:100vh;position:relative;background:linear-gradient(180deg,var(--bg-mid),var(--bg-dark))}
+
+/* === Screens === */
+.screen{display:none;flex-direction:column;align-items:center;min-height:100vh}
+.screen.active{display:flex}
+
+/* === START === */
+#screen-start{justify-content:center;background:radial-gradient(ellipse at center,var(--bg-glow),var(--bg-dark) 70%);padding:.8rem .48rem;position:relative;overflow:hidden}
+#screen-start::before{content:'';position:absolute;inset:0;background:url("data:image/svg+xml,%3Csvg width='60' height='60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 5L35 25 55 30 35 35 30 55 25 35 5 30 25 25Z' fill='%23C5963A' opacity='.03'/%3E%3C/svg%3E");pointer-events:none}
+.scroll-container{width:100%;animation:scrollUnroll 1.2s ease-out forwards}
+@keyframes scrollUnroll{0%{transform:scaleY(.01);opacity:0}50%{transform:scaleY(.5);opacity:.8}100%{transform:scaleY(1);opacity:1}}
+.scroll-body{background:linear-gradient(180deg,var(--paper),var(--paper-dark));border:.06rem solid var(--gold);border-radius:.16rem;padding:1rem .56rem .8rem;position:relative;box-shadow:0 0 .6rem rgba(197,150,58,.3),inset 0 0 1.2rem rgba(197,150,58,.05);text-align:center}
+.scroll-body::before,.scroll-body::after{content:'';position:absolute;left:10%;right:10%;height:.04rem;background:linear-gradient(90deg,transparent,var(--gold),transparent)}
+.scroll-body::before{top:.3rem}.scroll-body::after{bottom:.3rem}
+
+.seal{width:1.6rem;height:1.6rem;border:.06rem solid var(--red);border-radius:.16rem;display:flex;align-items:center;justify-content:center;margin:0 auto .4rem;transform:rotate(-8deg);color:var(--red);font-family:'Ma Shan Zheng',cursive;font-size:.52rem;line-height:1.1;position:relative}
+.seal::after{content:'';position:absolute;inset:-.12rem;border:.02rem solid var(--red);border-radius:.2rem;opacity:.4}
+.main-title{font-family:'Ma Shan Zheng',cursive;font-size:.68rem;color:var(--ink);margin-bottom:.12rem;letter-spacing:.08rem}
+.sub-title{font-size:.28rem;color:var(--ink-light);margin-bottom:.48rem;letter-spacing:.04rem}
+.divider{width:60%;height:.02rem;background:linear-gradient(90deg,transparent,var(--gold),transparent);margin:0 auto .4rem}
+.name-input-group{margin-bottom:.48rem}
+.name-input-group label{display:block;font-size:.26rem;color:var(--ink-light);margin-bottom:.16rem}
+.name-input-group input{width:70%;padding:.2rem .28rem;border:.04rem solid var(--gold);border-radius:.12rem;background:rgba(255,255,255,.6);font-family:'Ma Shan Zheng',cursive;font-size:.44rem;text-align:center;color:var(--ink);outline:none;transition:.3s}
+.name-input-group input::placeholder{color:#b8a080;font-size:.34rem}
+.name-input-group input:focus{border-color:var(--red);box-shadow:0 0 .24rem rgba(139,37,0,.2)}
+
+.btn{padding:.26rem .92rem;border:.04rem solid var(--gold);border-radius:.12rem;background:linear-gradient(180deg,var(--red),#6B1D00);color:var(--gold-light);font-family:'Ma Shan Zheng',cursive;font-size:.42rem;letter-spacing:.12rem;cursor:pointer;transition:all .3s;position:relative;overflow:hidden}
+.btn:hover{transform:translateY(-.04rem);box-shadow:0 .12rem .4rem rgba(139,37,0,.4)}
+.btn:active{transform:translateY(0)}
+.btn::after{content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.1),transparent);animation:btnShine 3s infinite}
+@keyframes btnShine{0%{left:-100%}100%{left:200%}}
+.start-hint{margin-top:.32rem;font-size:.24rem;color:var(--ink-light);opacity:.6}
+
+/* === QUIZ === */
+#screen-quiz{background:linear-gradient(180deg,var(--bg-mid),var(--bg-dark));padding:0}
+.quiz-header{width:100%;padding:.36rem .4rem;display:flex;align-items:center;gap:.24rem}
+.progress-bar{flex:1;height:.12rem;background:var(--gold-dim);border-radius:.06rem;overflow:hidden}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--gold),var(--gold-light));border-radius:.06rem;transition:width .5s ease}
+.progress-text{color:var(--gold);font-size:.26rem;min-width:.8rem;text-align:right}
+
+.quiz-card{width:calc(100% - .56rem);margin:0 .28rem;background:linear-gradient(180deg,var(--paper),var(--paper-dark));border:.04rem solid var(--gold);border-radius:.24rem;padding:.56rem .4rem;animation:cardIn .4s ease-out;position:relative;overflow:hidden}
+.quiz-card::before{content:'';position:absolute;top:0;left:0;right:0;height:.08rem;background:linear-gradient(90deg,var(--red),var(--gold),var(--red))}
+@keyframes cardIn{0%{transform:translateX(1rem);opacity:0}100%{transform:translateX(0);opacity:1}}
+
+.question-scene{font-size:.26rem;color:var(--ink-light);margin-bottom:.08rem;opacity:.7}
+.question-text{font-size:.34rem;font-weight:700;color:var(--ink);line-height:1.6;margin-bottom:.44rem}
+.options{display:flex;flex-direction:column;gap:.2rem}
+.option-btn{width:100%;padding:.24rem .32rem;border:.03rem solid rgba(197,150,58,.35);border-radius:.16rem;background:rgba(255,255,255,.5);font-family:'Noto Serif SC',serif;font-size:.28rem;color:var(--ink);text-align:left;cursor:pointer;transition:all .25s;line-height:1.5}
+.option-btn:hover{border-color:var(--gold);background:rgba(197,150,58,.1);transform:translateX(.06rem)}
+.option-btn:active,.option-btn.selected{border-color:var(--red);background:rgba(139,37,0,.08);color:var(--red);font-weight:700}
+.opt-label{display:inline-block;width:.44rem;height:.44rem;line-height:.44rem;text-align:center;border-radius:50%;background:var(--gold);color:#fff;font-size:.22rem;font-weight:700;margin-right:.16rem;vertical-align:middle}
+.option-btn.selected .opt-label{background:var(--red)}
+
+/* roast toast */
+.roast-toast{position:fixed;bottom:1.6rem;left:50%;transform:translateX(-50%) translateY(.4rem);background:rgba(44,24,16,.95);border:.02rem solid var(--gold);border-radius:.4rem;padding:.2rem .44rem;color:var(--gold-light);font-size:.26rem;font-family:'Ma Shan Zheng',cursive;letter-spacing:.04rem;white-space:nowrap;opacity:0;transition:all .4s ease;pointer-events:none;z-index:100;max-width:90vw}
+.roast-toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+/* === LOADING === */
+#screen-loading{justify-content:center;align-items:center;background:radial-gradient(ellipse at center,var(--bg-glow),var(--bg-dark) 70%);gap:.48rem}
+.loading-seal{width:2rem;height:2rem;border:.06rem solid var(--gold);border-radius:50%;display:flex;align-items:center;justify-content:center;animation:sealPulse 2s ease-in-out infinite;position:relative}
+.loading-seal::before{content:'';position:absolute;inset:-.2rem;border:.02rem solid var(--gold);border-radius:50%;opacity:.3;animation:sealRing 2s ease-in-out infinite}
+@keyframes sealPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.05)}}
+@keyframes sealRing{0%,100%{transform:scale(1);opacity:.3}50%{transform:scale(1.15);opacity:0}}
+.loading-icon{font-size:.8rem}
+.loading-text{color:var(--gold-light);font-family:'Ma Shan Zheng',cursive;font-size:.44rem;letter-spacing:.08rem}
+.loading-sub{color:var(--gold);font-size:.26rem;opacity:.6}
+
+/* === RESULT === */
+#screen-result{background:radial-gradient(ellipse at center top,var(--bg-glow),var(--bg-dark) 60%);padding:.48rem .28rem .8rem;justify-content:flex-start}
+
+.result-card{width:100%;background:linear-gradient(180deg,var(--paper-light),var(--paper) 30%,var(--paper-dark));border:.06rem solid var(--gold);border-radius:.24rem;padding:.72rem .4rem .52rem;position:relative;box-shadow:0 0 .8rem rgba(197,150,58,.25),0 .4rem 1.2rem rgba(0,0,0,.4);overflow:hidden}
+.result-card::before,.result-card::after{content:'';position:absolute;left:0;right:0;height:.12rem;background:linear-gradient(90deg,var(--red),var(--gold),var(--red),var(--gold),var(--red))}
+.result-card::before{top:0}.result-card::after{bottom:0}
+
+.decree-header{text-align:center;margin-bottom:.32rem}
+.decree-cloud{font-size:.36rem;opacity:.4}
+.decree-title{font-family:'Ma Shan Zheng',cursive;font-size:.48rem;color:var(--red);letter-spacing:.12rem;margin:.08rem 0}
+.decree-line{width:80%;height:.02rem;background:linear-gradient(90deg,transparent,var(--gold),transparent);margin:.24rem auto}
+
+/* avatar area */
+.result-avatar-area{display:flex;justify-content:center;margin-bottom:.24rem;position:relative}
+.result-avatar{width:1.8rem;height:1.8rem;border-radius:50%;border:.06rem solid var(--gold);display:flex;align-items:center;justify-content:center;font-size:.96rem;background:linear-gradient(135deg,var(--paper),#fff);box-shadow:0 .08rem .4rem rgba(197,150,58,.3);position:relative}
+.result-avatar .rank-badge{position:absolute;bottom:-.08rem;right:-.08rem;background:var(--red);color:var(--gold-light);font-family:'Ma Shan Zheng',cursive;font-size:.22rem;padding:.04rem .16rem;border-radius:.2rem;border:.03rem solid var(--gold);white-space:nowrap}
+
+.decree-body{text-align:center;margin-bottom:.24rem}
+.decree-opening{font-family:'Ma Shan Zheng',cursive;font-size:.34rem;color:var(--gold);margin-bottom:.24rem;letter-spacing:.06rem}
+.result-name{font-family:'Ma Shan Zheng',cursive;font-size:.36rem;color:var(--ink)}
+.result-official{font-family:'Ma Shan Zheng',cursive;font-size:.8rem;color:var(--red);margin:.16rem 0;letter-spacing:.1rem;text-shadow:.04rem .04rem .08rem rgba(139,37,0,.15);animation:titleGlow 3s ease-in-out infinite}
+@keyframes titleGlow{0%,100%{text-shadow:.04rem .04rem .08rem rgba(139,37,0,.15)}50%{text-shadow:.04rem .04rem .4rem rgba(139,37,0,.3),0 0 .8rem rgba(197,150,58,.15)}}
+.result-rank{display:inline-block;padding:.06rem .32rem;border:.03rem solid var(--gold);border-radius:.4rem;font-size:.26rem;color:var(--gold);background:rgba(197,150,58,.08);margin-bottom:.16rem}
+.result-rarity{font-size:.22rem;color:var(--red-light);margin-top:.08rem;opacity:.8}
+
+.result-quote{font-size:.28rem;color:var(--ink);line-height:1.8;padding:.28rem .24rem;background:rgba(197,150,58,.06);border-left:.06rem solid var(--gold);border-radius:0 .12rem .12rem 0;margin:.2rem 0 .32rem;text-align:left}
+
+/* biography */
+.bio-section{margin:.28rem 0;padding:.32rem .28rem;background:rgba(139,37,0,.04);border-radius:.16rem;border:.02rem solid rgba(197,150,58,.2)}
+.bio-title{font-family:'Ma Shan Zheng',cursive;font-size:.36rem;color:var(--red);margin-bottom:.2rem;text-align:center;letter-spacing:.06rem}
+.bio-timeline{display:flex;flex-direction:column;gap:.16rem}
+.bio-event{display:flex;gap:.2rem;font-size:.26rem;color:var(--ink);line-height:1.6}
+.bio-age{min-width:.84rem;color:var(--gold);font-weight:700;text-align:right;flex-shrink:0}
+.bio-text{flex:1}
+
+/* stats */
+.result-stats{display:flex;flex-direction:column;gap:.2rem;margin:.28rem 0}
+.stat-row{display:flex;align-items:center;gap:.16rem}
+.stat-label{font-size:.24rem;color:var(--ink-light);min-width:1.04rem;text-align:right}
+.stat-bar{flex:1;height:.16rem;background:var(--gold-dim);border-radius:.08rem;overflow:hidden}
+.stat-fill{height:100%;border-radius:.08rem;transition:width 1s ease}
+.stat-fill.red{background:linear-gradient(90deg,var(--red),var(--red-light))}
+.stat-fill.gold{background:linear-gradient(90deg,var(--gold),var(--gold-light))}
+.stat-fill.green{background:linear-gradient(90deg,var(--green),var(--green-light))}
+.stat-val{font-size:.22rem;color:var(--ink-light);min-width:.4rem}
+
+/* cp section */
+.cp-section{margin:.28rem 0;padding:.28rem;background:rgba(197,150,58,.06);border-radius:.16rem;border:.02rem solid rgba(197,150,58,.2)}
+.cp-title{font-family:'Ma Shan Zheng',cursive;font-size:.34rem;color:var(--gold);margin-bottom:.2rem;text-align:center;letter-spacing:.04rem}
+.cp-row{display:flex;align-items:center;gap:.2rem;margin-bottom:.16rem}
+.cp-row:last-child{margin-bottom:0}
+.cp-icon{font-size:.48rem;flex-shrink:0}
+.cp-info{flex:1}
+.cp-label{font-size:.22rem;color:var(--ink-dim)}
+.cp-name{font-size:.3rem;font-weight:700;color:var(--ink)}
+.cp-reason{font-size:.24rem;color:var(--ink-light);margin-top:.04rem}
+.cp-divider{width:100%;height:.02rem;background:linear-gradient(90deg,transparent,var(--gold-dim),transparent);margin:.16rem 0}
+
+.result-stamp{position:absolute;top:1rem;right:.32rem;width:1.28rem;height:1.28rem;border:.06rem solid rgba(139,37,0,.55);border-radius:50%;display:flex;align-items:center;justify-content:center;transform:rotate(15deg);font-family:'Ma Shan Zheng',cursive;font-size:.34rem;color:rgba(139,37,0,.55);line-height:1.1;animation:stampIn .5s ease-out .8s both}
+@keyframes stampIn{0%{transform:rotate(15deg) scale(3);opacity:0}60%{transform:rotate(15deg) scale(.9);opacity:1}100%{transform:rotate(15deg) scale(1);opacity:1}}
+
+.decree-footer{text-align:center;font-size:.24rem;color:var(--ink-light);opacity:.6;margin-top:.16rem}
+
+.result-actions{display:flex;gap:.2rem;margin-top:.4rem;width:100%}
+.result-actions .btn{flex:1;padding:.22rem .36rem;font-size:.34rem;letter-spacing:.06rem;text-align:center}
+.btn-outline{background:transparent!important;border:.04rem solid var(--gold);color:var(--gold-light)!important}
+.share-hint{text-align:center;color:var(--gold);font-size:.22rem;opacity:.5;margin-top:.24rem}
+
+/* image overlay */
+.img-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:200;flex-direction:column;align-items:center;justify-content:center;padding:.4rem}
+.img-overlay.show{display:flex}
+.img-overlay img{max-width:92%;max-height:70vh;border-radius:.16rem;box-shadow:0 .08rem .6rem rgba(0,0,0,.5)}
+.img-overlay .overlay-hint{color:var(--gold-light);font-size:.28rem;margin-top:.32rem;text-align:center;line-height:1.6}
+.img-overlay .overlay-close{position:absolute;top:.32rem;right:.4rem;color:#fff;font-size:.56rem;cursor:pointer;opacity:.7;z-index:201}
+.img-overlay .overlay-close:hover{opacity:1}
+.img-overlay .overlay-save-btn{margin-top:.28rem;padding:.2rem .72rem;border:.03rem solid var(--gold);border-radius:.12rem;background:linear-gradient(180deg,var(--red),#6B1D00);color:var(--gold-light);font-family:'Ma Shan Zheng',cursive;font-size:.36rem;letter-spacing:.06rem;cursor:pointer}
+
+/* PC适配：限制最大宽度时恢复px */
+@media(min-width:750px){
+  html{font-size:100px}
+}

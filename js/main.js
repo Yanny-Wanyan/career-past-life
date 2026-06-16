@@ -1,0 +1,533 @@
+// 职场前世档案 — main.js
+
+// ============================================================
+// QUESTIONS — 穿越叙事线
+// ============================================================
+var QUESTIONS = [
+  {
+    scene: '💫 第一卷 · 初入此世',
+    text: '如果穿越到古代，你最希望醒来时身处何方？',
+    options: [
+      { text: '权臣府邸的书房——桌上摊着半份未批的奏折', scores:{power:2,brain:2}, roast:'前世就是卷王命' },
+      { text: '边关军营的帐篷——远处号角声刚刚响起', scores:{courage:3,execute:1}, roast:'上辈子也没逃过996' },
+      { text: '繁华闹市的酒楼——怀里揣着花不完的银子', scores:{social:2,chill:2}, roast:'投胎投到了CBD' },
+      { text: '云雾深山的竹屋——窗外只有鸟叫和溪水声', scores:{freedom:3,chill:1}, roast:'恭喜，穿到了退休状态' }
+    ]
+  },
+  {
+    scene: '🔐 第二卷 · 天降密信',
+    text: '路上你捡到一封密信，拆开一看——是朝中重臣贪腐的铁证。你会？',
+    options: [
+      { text: '连夜抄一份备份，把原件匿名送到御史台', scores:{brain:3,justice:1}, roast:'社畜本能：凡事留个备份' },
+      { text: '直接实名上交，哪怕得罪权贵也无所谓', scores:{justice:3,courage:1}, roast:'前世就爱在群里@所有人' },
+      { text: '先查清楚这个重臣的势力范围再决定', scores:{power:3,brain:1}, roast:'职场生存指南满分学员' },
+      { text: '假装没看见，这种事掺和了没好下场', scores:{chill:3,freedom:1}, roast:'不是我的KPI，告辞' }
+    ]
+  },
+  {
+    scene: '📝 第三卷 · 科举之日',
+    text: '科举考场上，最后一题完全没见过。交卷还有半炷香，你——',
+    options: [
+      { text: '把自己对时政的真实想法写上去，豁出去了', scores:{courage:2,justice:2}, roast:'面试的时候也这么敢说？' },
+      { text: '旁征博引东拉西扯，先把卷面写满再说', scores:{social:2,brain:1,chill:1}, roast:'PPT高手的前世修炼' },
+      { text: '冷静分析考官可能想听什么，对症下药', scores:{brain:3,power:1}, roast:'揣摩领导意图の专家' },
+      { text: '写首诗交了，考不上就去游山玩水', scores:{freedom:3,chill:1}, roast:'古代的gap year选手' }
+    ]
+  },
+  {
+    scene: '⚔️ 第四卷 · 上司之令',
+    text: '你的顶头上司要你弹劾一个你觉得清白的同僚。文书已拟好，只差你署名。',
+    options: [
+      { text: '拒绝署名，当面说明理由，哪怕被穿小鞋', scores:{justice:3,courage:2}, roast:'硬骨头转世无疑了' },
+      { text: '署名，但暗中给那个同僚通风报信', scores:{social:2,brain:2}, roast:'两头都不得罪の艺术家' },
+      { text: '和上司谈条件：这次帮你，下次你欠我一个', scores:{power:3,brain:1}, roast:'天生谈判体质' },
+      { text: '辞职走人，伺候不了这种领导', scores:{freedom:3,justice:1}, roast:'裸辞，古今同源' }
+    ]
+  },
+  {
+    scene: '🍶 第五卷 · 酒局试探',
+    text: '同僚设宴请你喝酒。酒过三巡，他开始旁敲侧击打探你对新政的态度。',
+    options: [
+      { text: '反过来套他的话，比他还滑', scores:{brain:3,power:1}, roast:'酒桌上的情报之王' },
+      { text: '真诚地说出自己的看法，交浅言深又怎样', scores:{justice:2,social:2}, roast:'三杯酒下肚就掏心窝子' },
+      { text: '装醉，什么话都不说，明天全忘了', scores:{chill:3,brain:1}, roast:'喝假酒の影帝' },
+      { text: '直接说"别套我话"，然后干了这杯', scores:{courage:2,freedom:2}, roast:'社交恐惧は病，直接是药' }
+    ]
+  },
+  {
+    scene: '🌾 第六卷 · 天灾抉择',
+    text: '大旱之年，你负责赈灾。银两只够救一半人。粮商趁机涨价三倍，你怎么办？',
+    options: [
+      { text: '先斩后奏，强行征调粮商的粮食平价发放', scores:{courage:3,justice:2,execute:1}, roast:'古代版反垄断先锋' },
+      { text: '召集富户开会"自愿"捐款，不捐的公示名单', scores:{power:3,social:1}, roast:'道德绑架拿捏了' },
+      { text: '写折子向朝廷请求增拨银两，走正规渠道', scores:{justice:2,brain:1,chill:1}, roast:'流程走完人就没了' },
+      { text: '自己掏出积蓄先救急，名声比银子值钱', scores:{social:3,justice:1}, roast:'前世就在为团队贴钱' }
+    ]
+  },
+  {
+    scene: '👑 第七卷 · 天子召见',
+    text: '皇帝单独召见你，随口问："你觉得丞相这人如何？"你知道丞相正失势。',
+    options: [
+      { text: '实话实说丞相的优缺点，不站队', scores:{justice:2,courage:2}, roast:'政治素养为零の诚实人' },
+      { text: '避重就轻，用"臣不敢妄议"搪塞过去', scores:{brain:3,chill:1}, roast:'太极拳黑带选手' },
+      { text: '顺着圣意暗示丞相不行，趁机推荐自己人', scores:{power:3,brain:1}, roast:'职场上位の教科书' },
+      { text: '为丞相说好话——他虽失势但确实有功', scores:{loyalty:3,courage:1}, roast:'前世就是嘴硬心软的人' }
+    ]
+  },
+  {
+    scene: '🏯 第八卷 · 改革风云',
+    text: '你的改革方案被保守派集体反对，弹劾你的奏折堆满了皇帝桌案。',
+    options: [
+      { text: '逐个击破——找到保守派内部分歧，分化瓦解', scores:{brain:3,power:2}, roast:'古代政治の博弈论大师' },
+      { text: '公开辩论，用事实和数据说话，赢了就推行', scores:{justice:2,courage:2,execute:1}, roast:'前世的述职答辩王' },
+      { text: '迂回推进——先搞个试点，用成果堵住悠悠之口', scores:{execute:3,brain:1}, roast:'小步快跑，灰度发布の祖师' },
+      { text: '算了，推不动就不推了，回家种地也挺好', scores:{freedom:3,chill:1}, roast:'需求被砍就躺平' }
+    ]
+  },
+  {
+    scene: '🎭 第九卷 · 暗道通天',
+    text: '有人密告你，走一条捷径就能直升三品。但这条路需要你帮某人掩盖一桩旧案。',
+    options: [
+      { text: '拒绝。升官不靠这个，靠了也睡不着', scores:{justice:3,freedom:1}, roast:'前世的合规风控部部长' },
+      { text: '先了解是什么旧案——如果罪不至死，可以商量', scores:{brain:3,power:1}, roast:'灰色地带の精算师' },
+      { text: '假装答应，暗中收集对方把柄，反手一击', scores:{power:3,courage:1}, roast:'卧底天赋在前世就点满了' },
+      { text: '这种事别来找我，我只想平平安安当个小官', scores:{chill:3,freedom:1}, roast:'前世也是不想卷の普通人' }
+    ]
+  },
+  {
+    scene: '🌅 终卷 · 何去何从',
+    text: '朝堂风云变幻，新旧交替之际。你最终的选择是——',
+    options: [
+      { text: '留在权力中心，这盘棋我要亲手下到最后', scores:{power:3,execute:2,courage:1}, roast:'卷到最后就是你赢' },
+      { text: '外放为官，远离是非，造福一方百姓', scores:{justice:2,execute:2,social:1}, roast:'下沉市场の开拓者' },
+      { text: '著见闻写成书传于后世', scores:{brain:3,freedom:1}, roast:'前世就在写公众号了' },
+      { text: '辞官归隐，和三五好友喝酒下棋了此余生', scores:{freedom:3,chill:2}, roast:'提前退休の梦想家' }
+    ]
+  }
+];
+
+// ============================================================
+// OFFICIALS — 15种结果（含极端+隐藏）
+// ============================================================
+var OFFICIALS = [
+  {
+    id:'emperor', title:'一代帝王', rank:'九五之尊', emoji:'👑',
+    rarity:'仅2%的测试者获得此结果',
+    match:function(s){ return s.power*2 + s.courage + s.execute - s.chill*2 },
+    quote:function(n){ return n+'此人，王气冲天，目无群臣。穿越第一天就想造反，穿越第二天已经登基。天下不过是此人的一盘棋，棋子叫"全体员工"。\n\n「你不当老板，是老板们的运气。」' },
+    bio:function(n){ return [
+      {age:'十六岁',text:'入仕第一天就觉得上司不行，"要是我来管一定更好"'},
+      {age:'二十岁',text:'连升三级，有人说靠能力，有人说靠手段，只有'+n+'知道——都靠'},
+      {age:'三十岁',text:'门生故吏遍布朝堂，咳嗽一声六部都要递润喉糖'},
+      {age:'四十岁',text:'一言可定天下事，左手权力，右手更大的权力'},
+      {age:'结局',text:'史书评曰：千古一帝。但离职率也是千古第一'}
+    ]},
+    stats:[{label:'王霸气',pct:100,color:'red'},{label:'掌控力',pct:98,color:'gold'},{label:'亲和力',pct:15,color:'green'}],
+    bestCP:'hubu', bestCPReason:'帮你管钱的人，最值得信任',
+    worstCP:'yushi', worstCPReason:'你最大的对手就是那个天天挑刺的人'
+  },
+  {
+    id:'shoufu', title:'内阁首辅', rank:'正一品', emoji:'🏛️',
+    rarity:'约5%的测试者获得此结果',
+    match:function(s){ return s.power + s.brain + s.execute },
+    quote:function(n){ return n+'此人，生具宰辅之才，朝堂之上运筹帷幄，百官莫不信服。表面温文尔雅，实则每一步都在下棋。\n\n「你不上朝，朝堂不敢开会。」' },
+    bio:function(n){ return [
+      {age:'十八岁',text:'科举二甲头名，考官批语："此子胸有丘壑"'},
+      {age:'二十五岁',text:'入翰林院三年，写的奏折被皇帝点名表扬七次'},
+      {age:'三十五岁',text:'升任内阁学士，开始参与核心决策'},
+      {age:'四十五岁',text:'拜首辅，推行新政，朝堂焕然一新'},
+      {age:'结局',text:'七十岁致仕，门生送行队伍排了三里路'}
+    ]},
+    stats:[{label:'谋略值',pct:95,color:'red'},{label:'执行力',pct:90,color:'gold'},{label:'摸鱼值',pct:8,color:'green'}],
+    bestCP:'hanlin', bestCPReason:'给你写稿的人，最懂你心思',
+    worstCP:'sanren', worstCPReason:'最看不惯那种有才华却躺平的人'
+  },
+  {
+    id:'jinyi', title:'锦衣卫指挥使', rank:'正三品', emoji:'🗡️',
+    rarity:'约6%的测试者获得此结果',
+    match:function(s){ return s.brain*2 + s.power - s.social },
+    quote:function(n){ return n+'此人，心思缜密如蛛网，消息灵通胜飞鸽。朝中百官谁跟谁不和、谁家孩子考试作弊，此人了如指掌。\n\n「你的朋友圈，就是你的情报网。」' },
+    bio:function(n){ return [
+      {age:'十五岁',text:'因一次偶然帮皇帝查出身边内奸，被破格录用'},
+      {age:'二十岁',text:'办了三桩大案，每桩都是教科书级别的情报战'},
+      {age:'三十岁',text:'升任指挥使，手下暗桩遍布全国'},
+      {age:'四十岁',text:'权倾朝野，百官见了绕道走，路边的猫看见都害怕'},
+      {age:'结局',text:'全身而退，留下一本加密日记，至今无人能破译'}
+    ]},
+    stats:[{label:'情报值',pct:98,color:'red'},{label:'心机值',pct:92,color:'gold'},{label:'被信任',pct:25,color:'green'}],
+    bestCP:'shoufu', bestCPReason:'你负责查，他负责办，黄金搭档',
+    worstCP:'jiangjun', worstCPReason:'武将太直，你看着就累'
+  },
+  {
+    id:'yushi', title:'御史中丞', rank:'正三品', emoji:'⚖️',
+    rarity:'约8%的测试者获得此结果',
+    match:function(s){ return s.justice*2 + s.courage },
+    quote:function(n){ return n+'此人，目光如炬、铁面无私。上至丞相下至小吏，但凡有错，此人必参。其座右铭：流程不对，打回重审。\n\n「年度最佳Code Reviewer，每一世都是你。」' },
+    bio:function(n){ return [
+      {age:'二十岁',text:'中进士，入御史台，第一天就弹劾了顶头上司'},
+      {age:'二十五岁',text:'因"弹劾过于频繁"被同僚联名投诉'},
+      {age:'三十五岁',text:'升任中丞，弹劾奏折专设一个柜子存放'},
+      {age:'四十五岁',text:'百官送其绰号"阎王"，但背地里都承认他公正'},
+      {age:'结局',text:'告老还乡时两袖清风，同僚凑钱给他买了一头驴'}
+    ]},
+    stats:[{label:'正义感',pct:98,color:'red'},{label:'得罪人',pct:92,color:'gold'},{label:'人缘值',pct:20,color:'green'}],
+    bestCP:'jiangjun', bestCPReason:'一样正直一样猛，惺惺相惜',
+    worstCP:'jinyi', worstCPReason:'见不得他那套背后搞人的路数'
+  },
+  {
+    id:'hanlin', title:'翰林院编修', rank:'正七品', emoji:'📚',
+    rarity:'约9%的测试者获得此结果',
+    match:function(s){ return s.brain*2 + s.freedom },
+    quote:function(n){ return n+'此人，才华横溢，下笔有神。旁人还在构思开头，此人已完成初稿并自行修改三遍。唯一的烦恼——永远觉得自己写得不够好。\n\n「你的快乐，就是在deadline前改第八版。」' },
+    bio:function(n){ return [
+      {age:'十四岁',text:'写的文章被考官传阅，一致评价："老练得不像小孩"'},
+      {age:'二十岁',text:'状元及第，入翰林，开始了漫长的文字生涯'},
+      {age:'三十岁',text:'给皇帝代笔圣旨，大臣们的奏折也暗中找他润色'},
+      {age:'四十岁',text:'编修完成三部典籍，累秃了头但很有成就感'},
+      {age:'结局',text:'著作等身，后世学子奉其为"文宗"，虽然发量为零'}
+    ]},
+    stats:[{label:'才华值',pct:96,color:'red'},{label:'完美主义',pct:94,color:'gold'},{label:'发量值',pct:15,color:'green'}],
+    bestCP:'shoufu', bestCPReason:'你写他批，天作之合',
+    worstCP:'guanglu', worstCPReason:'你在改第八版的时候他在吃第八顿'
+  },
+  {
+    id:'hubu', title:'户部尚书', rank:'正二品', emoji:'🧮',
+    rarity:'约7%的测试者获得此结果',
+    match:function(s){ return s.brain + s.execute + s.justice },
+    quote:function(n){ return n+'此人，精打细算，分毫不差。六部银两皆从其手中过，一文钱掰成两半花。同僚报销多写一两银子，此人必问：发票呢？\n\n「前世就是财务部扛把子。」' },
+    bio:function(n){ return [
+      {age:'二十岁',text:'入户部，第一个月就查出三笔陈年旧账'},
+      {age:'二十八岁',text:'设计新的赋税制度，国库收入翻了一倍'},
+      {age:'三十八岁',text:'升任尚书，皇帝称其为"我的钱袋子"'},
+      {age:'四十八岁',text:'全国财政一手掌控，没人敢在报销单上做文章'},
+      {age:'结局',text:'致仕时把二十年的账目一笔一笔交接清楚，花了三个月'}
+    ]},
+    stats:[{label:'精算力',pct:97,color:'red'},{label:'抠门值',pct:90,color:'gold'},{label:'请客率',pct:5,color:'green'}],
+    bestCP:'emperor', bestCPReason:'最有权的人需要最会算账的人',
+    worstCP:'guanglu', worstCPReason:'光禄寺那个餐费预算你看过吗？'
+  },
+  {
+    id:'jiangjun', title:'镇远大将军', rank:'从一品', emoji:'⚔️',
+    rarity:'约7%的测试者获得此结果',
+    match:function(s){ return s.courage*2 + s.execute },
+    quote:function(n){ return n+'此人，令行禁止，雷厉风行。战场上身先士卒，军帐中连夜制定方案。此人信条：deadline就是deadline，延期不存在的。\n\n「前世就在996，而且是自愿的。」' },
+    bio:function(n){ return [
+      {age:'十六岁',text:'从军，因为嫌文官升迁太慢'},
+      {age:'二十二岁',text:'一战成名，单骑退敌（真实版本是带了500人，但传着传着就变了）'},
+      {age:'三十岁',text:'封将军，治军严明，部下又敬又怕'},
+      {age:'四十岁',text:'镇守边疆十年，敌人听到名字就绕道'},
+      {age:'结局',text:'班师回朝，皇帝问想要什么赏赐，答曰："假期"'}
+    ]},
+    stats:[{label:'执行力',pct:99,color:'red'},{label:'威压值',pct:93,color:'gold'},{label:'温柔值',pct:12,color:'green'}],
+    bestCP:'yushi', bestCPReason:'一样正直，一文一武，双剑合璧',
+    worstCP:'sanren', worstCPReason:'看到有人不上班就浑身难受'
+  },
+  {
+    id:'taifu', title:'太子太傅', rank:'从一品', emoji:'🎓',
+    rarity:'约8%的测试者获得此结果',
+    match:function(s){ return s.social + s.brain + s.justice },
+    quote:function(n){ return n+'此人，学识渊博，诲人不倦。太子顽劣，唯惧其一句：这道题我讲过几遍了？带新人带到自己秃头，但学生个个出类拔萃。\n\n「古代的tech lead，前世就在带新人。」' },
+    bio:function(n){ return [
+      {age:'二十岁',text:'中进士后主动申请去国子监教书'},
+      {age:'二十八岁',text:'教出了三个状元，学生比老师还出名'},
+      {age:'三十五岁',text:'被皇帝钦点为太子太傅，"你教出来的人我放心"'},
+      {age:'四十五岁',text:'太子继位，对其行师生大礼'},
+      {age:'结局',text:'桃李满天下，退休后学生轮流请客，一年365天排满了'}
+    ]},
+    stats:[{label:'耐心值',pct:94,color:'red'},{label:'知识量',pct:92,color:'gold'},{label:'发量值',pct:18,color:'green'}],
+    bestCP:'hanlin', bestCPReason:'都是文化人，聊得来',
+    worstCP:'jinyi', worstCPReason:'教书育人和搞情报，价值观不合'
+  },
+  {
+    id:'guanglu', title:'光禄寺少卿', rank:'正四品', emoji:'🍜',
+    rarity:'约9%的测试者获得此结果',
+    match:function(s){ return s.chill + s.social + s.freedom },
+    quote:function(n){ return n+'此人，精通膳食之道。上至天子口味，下至百官忌口，烂熟于心。此人人生信条：没有一顿好饭解决不了的事，如果有，那就两顿。\n\n「团队的快乐源泉，永远知道哪家外卖好吃。」' },
+    bio:function(n){ return [
+      {age:'十八岁',text:'入朝为官，别人研究兵法政治，此人研究食谱'},
+      {age:'二十五岁',text:'操办了一次国宴，皇帝连夸三声好'},
+      {age:'三十五岁',text:'升任少卿，菜单安排得百官都想来蹭饭'},
+      {age:'四十岁',text:'发明了三道名菜，流传至今'},
+      {age:'结局',text:'退休后开了一家酒楼，排队要排到下个朝代'}
+    ]},
+    stats:[{label:'美食力',pct:99,color:'red'},{label:'快乐值',pct:96,color:'gold'},{label:'上进心',pct:22,color:'green'}],
+    bestCP:'taiyi', bestCPReason:'你管吃他管养生，珠联璧合',
+    worstCP:'hubu', worstCPReason:'每次报预算都被户部砍一半'
+  },
+  {
+    id:'qintian', title:'钦天监监正', rank:'正五品', emoji:'🔮',
+    rarity:'约6%的测试者获得此结果',
+    match:function(s){ return s.brain + s.freedom + s.chill },
+    quote:function(n){ return n+'此人，夜观天象、日算吉凶。旁人不解其术，但每逢此人说"今日不宜上线"，系统必出故障。朝野上下皆敬畏之。\n\n「你说水逆，公司就出bug。」' },
+    bio:function(n){ return [
+      {age:'十二岁',text:'夜观星象，预言第二天下雨，结果真下了（碰巧）'},
+      {age:'二十岁',text:'入钦天监，因为实在不想参与朝堂斗争'},
+      {age:'三十岁',text:'精确预测了一次日食，从此地位飙升'},
+      {age:'四十岁',text:'皇帝出门先问他吉凶，大臣们争着请他看风水'},
+      {age:'结局',text:'活到九十岁。有人说这就是懂天象的好处'}
+    ]},
+    stats:[{label:'直觉力',pct:97,color:'red'},{label:'神秘感',pct:95,color:'gold'},{label:'科学值',pct:20,color:'green'}],
+    bestCP:'hanlin', bestCPReason:'一个算天一个写文，都是坐得住的人',
+    worstCP:'jiangjun', worstCPReason:'将军说打，你说今日不宜，吵翻了'
+  },
+  {
+    id:'taiyi', title:'太医院院使', rank:'正五品', emoji:'🏥',
+    rarity:'约8%的测试者获得此结果',
+    match:function(s){ return s.social + s.chill + s.execute },
+    quote:function(n){ return n+'此人，悬壶济世、望闻问切。同僚稍有不适，此人必递热水并叮嘱早睡。保温杯里泡枸杞，这不是习惯，是信仰。\n\n「你上辈子就在劝人多喝热水。」' },
+    bio:function(n){ return [
+      {age:'十六岁',text:'立志学医，因为觉得"能帮到人"'},
+      {age:'二十四岁',text:'入太医院，第一天就把同事的感冒治好了'},
+      {age:'三十四岁',text:'治好了太后的头疼，从此成为御用太医'},
+      {age:'四十四岁',text:'编写了一本养生手册，朝中人手一本'},
+      {age:'结局',text:'活到八十八岁，死因：累死的（操心别人操心的）'}
+    ]},
+    stats:[{label:'关怀值',pct:96,color:'red'},{label:'养生值',pct:99,color:'gold'},{label:'冒险值',pct:10,color:'green'}],
+    bestCP:'guanglu', bestCPReason:'你管健康他管美食，最佳组合',
+    worstCP:'jiangjun', worstCPReason:'你让他养生他让你跑操，互相折磨'
+  },
+  {
+    id:'yulin', title:'御林军统领', rank:'正三品', emoji:'🛡️',
+    rarity:'约7%的测试者获得此结果',
+    match:function(s){ return s.courage + s.execute + s.social },
+    quote:function(n){ return n+'此人，忠心耿耿、坚如磐石。此人守护之人，风雨不侵。你在的群没人敢乱发言，你在的项目没人敢摸鱼。\n\n「团队里最让人安心的六边形战士。」' },
+    bio:function(n){ return [
+      {age:'十八岁',text:'入禁军，每天第一个到训练场'},
+      {age:'二十五岁',text:'为救上司挡了一箭，从此被重用'},
+      {age:'三十岁',text:'升任统领，皇宫安保滴水不漏'},
+      {age:'四十岁',text:'挫败三次宫廷政变，每次都靠提前布局'},
+      {age:'结局',text:'皇帝亲赐"忠勇无双"匾额，挂在家里最显眼的位置'}
+    ]},
+    stats:[{label:'可靠值',pct:98,color:'red'},{label:'安全感',pct:96,color:'gold'},{label:'灵活度',pct:28,color:'green'}],
+    bestCP:'shoufu', bestCPReason:'他谋划你执行，文武双全',
+    worstCP:'sanren', worstCPReason:'保护一个天天想跑的人，太难了'
+  },
+  {
+    id:'sanren', title:'逍遥散人', rank:'无品（方外之人）', emoji:'🏔️',
+    rarity:'约8%的测试者获得此结果',
+    match:function(s){ return s.freedom*2 + s.chill },
+    quote:function(n){ return n+'此人，不入朝堂，不问世事。携一壶酒、骑一头驴，天地间来去自如。旁人问为何不做官，答曰：打工是不可能打工的。\n\n「古代的数字游民，前世就实现了财务自由。」' },
+    bio:function(n){ return [
+      {age:'十八岁',text:'考中了科举，但第二天就弃官了——"做一天就知道不适合"'},
+      {age:'二十五岁',text:'游历名山大川，走遍了半个天下'},
+      {age:'三十五岁',text:'在山中开了一间书院，只教自己想教的东西'},
+      {age:'四十五',text:'各地名士争相来访，反而比当官更有影响力'},
+      {age:'结局',text:'无疾而终，留下一首诗：此生不为五斗米，笑看朝堂几兴亡'}
+    ]},
+    stats:[{label:'自由度',pct:100,color:'red'},{label:'快乐值',pct:97,color:'gold'},{label:'存款值',pct:8,color:'green'}],
+    bestCP:'qintian', bestCPReason:'都是活在自己世界里的人，互不打扰',
+    worstCP:'shoufu', worstCPReason:'首辅觉得你浪费才华，你觉得他浪费人生'
+  },
+  {
+    id:'shumin', title:'快乐庶民', rank:'无品（但自由）', emoji:'😎',
+    rarity:'仅3%的测试者获得此结果',
+    match:function(s){ return s.chill*2 + s.freedom - s.power*2 },
+    quote:function(n){ return n+'此人，无官无职，无忧无虑。早起卖豆腐，午后晒太阳，晚上跟邻居下棋。皇帝换了三个，此人的快乐一分没少。\n\n「前世就不想上班，这辈子也没变。」' },
+    bio:function(n){ return [
+      {age:'十八岁',text:'读了两年书觉得没意思，去集市摆了个摊'},
+      {age:'二十五岁',text:'娶了隔壁卖包子的姑娘，从此实现了"吃饭自由"'},
+      {age:'三十五岁',text:'小摊变成了小店，雇了两个伙计，自己当甩手掌柜'},
+      {age:'四十五岁',text:'邻居当官的、经商的都来找他聊天解压'},
+      {age:'结局',text:'活到九十九，子孙满堂。墓碑上刻着：这辈子，值了'}
+    ]},
+    stats:[{label:'幸福感',pct:100,color:'red'},{label:'自由度',pct:98,color:'gold'},{label:'上进心',pct:5,color:'green'}],
+    bestCP:'guanglu', bestCPReason:'都是享受生活的人',
+    worstCP:'emperor', worstCPReason:'皇帝看你不务正业，你看皇帝活得太累'
+  },
+  {
+    id:'xiaoxiong', title:'乱世枭雄', rank:'自封（不服来战）', emoji:'🔥',
+    rarity:'仅1%的测试者获得此结果 · 隐藏结局',
+    match:function(s){ return s.power + s.courage + s.brain - s.justice*2 },
+    quote:function(n){ return n+'此人，不按套路出牌，天生反骨。别人下棋按规则，此人直接掀桌。朝堂容不下此人，此人也看不上朝堂。\n\n「如果创业有前世，你已经是连续创业者了。」' },
+    bio:function(n){ return [
+      {age:'十六岁',text:'被学堂开除，理由："总是带头质疑老师"'},
+      {age:'二十岁',text:'乱世之中揭竿而起，三个月拉起一支队伍'},
+      {age:'三十岁',text:'占据一方，亦正亦邪，百姓说不清是匪是将'},
+      {age:'四十岁',text:'差点称帝，但在最关键时做了一个谁也没想到的选择'},
+      {age:'结局',text:'史书上评价两极分化：有人说是枭雄，有人说是真性情'}
+    ]},
+    stats:[{label:'野心值',pct:99,color:'red'},{label:'不走寻常路',pct:100,color:'gold'},{label:'守规矩',pct:3,color:'green'}],
+    bestCP:'jiangjun', bestCPReason:'能打仗的人你最需要',
+    worstCP:'yushi', worstCPReason:'你掀桌他拍桌，两个人能把桌子拆了'
+  }
+];
+
+var OFFICIAL_MAP = {};
+OFFICIALS.forEach(function(o){ OFFICIAL_MAP[o.id] = o });
+
+// ============================================================
+// STATE
+// ============================================================
+var userName = '', currentQ = 0, scores = {};
+var LABELS = ['A','B','C','D'];
+
+function resetScores(){ scores = {power:0,brain:0,courage:0,execute:0,justice:0,social:0,chill:0,freedom:0,loyalty:0} }
+
+function showScreen(id){ document.querySelectorAll('.screen').forEach(function(s){s.classList.remove('active')}); document.getElementById(id).classList.add('active') }
+
+function startQuiz(){
+  userName = document.getElementById('nameInput').value.trim() || '无名氏';
+  currentQ = 0; resetScores();
+  showScreen('screen-quiz'); renderQuestion();
+}
+
+function renderQuestion(){
+  var q = QUESTIONS[currentQ];
+  document.getElementById('progressFill').style.width = ((currentQ+1)/QUESTIONS.length*100)+'%';
+  document.getElementById('progressText').textContent = (currentQ+1)+'/'+QUESTIONS.length;
+  var card = document.getElementById('quizCard');
+  card.style.animation='none'; card.offsetHeight; card.style.animation='cardIn .4s ease-out';
+  document.getElementById('questionScene').textContent = q.scene;
+  document.getElementById('questionText').textContent = q.text;
+  var container = document.getElementById('optionsContainer');
+  container.innerHTML = '';
+  q.options.forEach(function(opt,i){
+    var btn = document.createElement('button');
+    btn.className='option-btn';
+    btn.innerHTML='<span class="opt-label">'+LABELS[i]+'</span>'+opt.text;
+    btn.onclick=function(){ selectOption(i) };
+    container.appendChild(btn);
+  });
+}
+
+function showRoast(text){
+  var toast = document.getElementById('roastToast');
+  toast.textContent = '「'+text+'」';
+  toast.classList.add('show');
+  setTimeout(function(){ toast.classList.remove('show') }, 1800);
+}
+
+function selectOption(idx){
+  var btns = document.querySelectorAll('.option-btn');
+  btns.forEach(function(b){b.classList.remove('selected')});
+  btns[idx].classList.add('selected');
+  var opt = QUESTIONS[currentQ].options[idx];
+  for(var k in opt.scores) scores[k] = (scores[k]||0) + opt.scores[k];
+  showRoast(opt.roast);
+  setTimeout(function(){
+    currentQ++;
+    if(currentQ < QUESTIONS.length) renderQuestion();
+    else showLoading();
+  }, 900);
+}
+
+function showLoading(){
+  showScreen('screen-loading');
+  var phrases = ['正在翻阅三生石上的记录...','转世司侍郎正在核对档案...','调取你的前世功过簿...','查到了……正在生成档案...','档案已调出，即将揭晓——'];
+  var sub = document.getElementById('loadingSub');
+  var pi=0;
+  var interval = setInterval(function(){ pi++; if(pi<phrases.length) sub.textContent=phrases[pi]; },550);
+  setTimeout(function(){ clearInterval(interval); showResult(); }, 3000);
+}
+
+function showResult(){
+  var best=OFFICIALS[0], bestScore=-Infinity;
+  OFFICIALS.forEach(function(o){
+    var s=o.match(scores);
+    if(s>bestScore){ bestScore=s; best=o; }
+  });
+
+  showScreen('screen-result');
+  document.getElementById('resultAvatar').firstChild.textContent = best.emoji;
+  document.getElementById('resultRankBadge').textContent = best.rank;
+  document.getElementById('resultName').textContent = '转世司查明：'+userName+' 前世乃——';
+  document.getElementById('resultOfficial').textContent = best.title;
+  document.getElementById('resultRank').textContent = best.rank;
+  document.getElementById('resultRarity').textContent = best.rarity;
+  document.getElementById('resultQuote').innerText = best.quote(userName);
+
+  var timeline = document.getElementById('bioTimeline');
+  timeline.innerHTML='';
+  best.bio(userName).forEach(function(ev){
+    var div=document.createElement('div'); div.className='bio-event';
+    div.innerHTML='<span class="bio-age">'+ev.age+'</span><span class="bio-text">'+ev.text+'</span>';
+    timeline.appendChild(div);
+  });
+
+  var statsC = document.getElementById('resultStats');
+  statsC.innerHTML='';
+  best.stats.forEach(function(st,i){
+    var row=document.createElement('div'); row.className='stat-row';
+    row.innerHTML='<span class="stat-label">'+st.label+'</span><div class="stat-bar"><div class="stat-fill '+st.color+'" style="width:0%"></div></div><span class="stat-val">'+st.pct+'%</span>';
+    statsC.appendChild(row);
+    setTimeout(function(){ row.querySelector('.stat-fill').style.width=st.pct+'%' }, 300+i*200);
+  });
+
+  var cpC = document.getElementById('cpContent');
+  var bestCPObj = OFFICIAL_MAP[best.bestCP];
+  var worstCPObj = OFFICIAL_MAP[best.worstCP];
+  cpC.innerHTML=
+    '<div class="cp-row">'+
+      '<div class="cp-icon">'+bestCPObj.emoji+'</div>'+
+      '<div class="cp-info">'+
+        '<div class="cp-label">💛 最佳搭档</div>'+
+        '<div class="cp-name">'+bestCPObj.title+'</div>'+
+        '<div class="cp-reason">'+best.bestCPReason+'</div>'+
+      '</div>'+
+    '</div>'+
+    '<div class="cp-divider"></div>'+
+    '<div class="cp-row">'+
+      '<div class="cp-icon">'+worstCPObj.emoji+'</div>'+
+      '<div class="cp-info">'+
+        '<div class="cp-label">⚡ 天生冤家</div>'+
+        '<div class="cp-name">'+worstCPObj.title+'</div>'+
+        '<div class="cp-reason">'+best.worstCPReason+'</div>'+
+      '</div>'+
+    '</div>';
+}
+
+function restart(){ document.getElementById('nameInput').value=''; showScreen('screen-start'); window.scrollTo(0,0); }
+
+function shareResult(){ saveCardAsImage(); }
+
+var currentImageDataUrl = '';
+
+function saveCardAsImage(){
+  var card = document.getElementById('resultCard');
+  html2canvas(card, {
+    backgroundColor: '#F5E6C8',
+    scale: 2,
+    useCORS: true,
+    logging: false
+  }).then(function(canvas){
+    currentImageDataUrl = canvas.toDataURL('image/png');
+    var overlay = document.getElementById('imgOverlay');
+    var img = document.getElementById('overlayImg');
+    var hint = document.getElementById('overlayHint');
+    var saveBtn = document.getElementById('overlaySaveBtn');
+    img.src = currentImageDataUrl;
+    var isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+    if(isMobile){
+      hint.textContent = '📱 长按上方图片即可保存到相册';
+      saveBtn.style.display = 'none';
+    } else {
+      hint.textContent = '💻 点击下方按钮下载图片';
+      saveBtn.style.display = 'block';
+    }
+    overlay.classList.add('show');
+  }).catch(function(){
+    alert('图片生成失败，请手动截屏 📸');
+  });
+}
+
+function downloadImage(){
+  if(!currentImageDataUrl) return;
+  var link = document.createElement('a');
+  link.download = '职场前世档案_' + userName + '.png';
+  link.href = currentImageDataUrl;
+  link.click();
+}
+
+function closeOverlay(e){
+  if(e && e.target.tagName === 'IMG') return;
+  document.getElementById('imgOverlay').classList.remove('show');
+}
+
+document.addEventListener('dblclick', function(e){
+  var card = document.getElementById('resultCard');
+  if(card && card.contains(e.target) && document.getElementById('screen-result').classList.contains('active')){
+    saveCardAsImage();
+  }
+});
+
+document.getElementById('nameInput').addEventListener('keyup',function(e){ if(e.key==='Enter') startQuiz(); });
